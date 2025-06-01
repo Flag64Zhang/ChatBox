@@ -1,0 +1,68 @@
+<!--index.wxml-->
+<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF"></navigation-bar>
+<van-button type="primary" bind:tap="onClick">按钮</van-button>
+<van-button type="info" bind:click="showLoadingToast">显示加载Toast</van-button>
+<van-button type="warning" bind:click="showSuccessToast">显示成功Toast</van-button>
+<van-button type="danger" bind:click="showFailToast">显示失败Toast</van-button>
+<van-toast id="van-toast" />
+<view class="container">
+  <!-- 基础滑块 -->
+  <view class="section">
+    <view class="title">基础用法</view>
+    <van-slider value="{{value1}}" bind:change="onChange1" />
+    <view class="value">当前值: {{value1}}</view>
+  </view>
+
+  <!-- 自定义范围 -->
+  <view class="section">
+    <view class="title">自定义范围 (50-200)</view>
+    <van-slider 
+      value="{{value2}}" 
+      min="50" 
+      max="200" 
+      step="10" 
+      bind:change="onChange2" 
+    />
+    <view class="value">当前值: {{value2}}</view>
+  </view>
+
+  <!-- 禁用状态 -->
+  <view class="section">
+    <view class="title">禁用状态</view>
+    <van-slider value="{{30}}" disabled />
+  </view>
+
+  <!-- 自定义样式 -->
+  <view class="section">
+    <view class="title">自定义样式</view>
+    <van-slider
+      value="{{value3}}"
+      active-color="#07c160"
+      bar-height="8px"
+      bind:change="onChange3"
+    />
+    <view class="value">当前值: {{value3}}</view>
+  </view>
+
+  <!-- 带输入框 -->
+  <view class="section">
+    <view class="title">带输入框控制</view>
+    <van-slider
+      value="{{value4}}"
+      bind:change="onChange4"
+    />
+    <van-field
+      type="number"
+      value="{{value4}}"
+      placeholder="输入数值"
+      bind:change="onInputChange"
+    />
+  </view>
+</view>
+
+<scroll-view class="scrollarea" scroll-y type="list">
+  <view class="container">
+    Weixin  还是不行，可以尝试使用gpt生成案例试试
+  </view>
+</scroll-view>
+

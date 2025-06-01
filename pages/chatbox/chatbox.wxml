@@ -1,0 +1,21 @@
+<!--pages/chatbox/chatbox.wxml-->
+<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF">列表頁</navigation-bar>
+<view>
+  <scroll-view style="width:100%;" scroll-with-animation="{{true}}" scroll-y="true">
+    <!-- 遍历 items 数组，渲染每个组件 -->
+    <view wx:for="{{items}}" wx:key="*this" wx:key="id">
+      <text >{{item.name}}</text>
+      <radio-group id="gender_id" class="radio-group" bindchange="genderChange" data-id='{{item.id}}'>
+          <radio value="1" checked="{{true}}" />男
+          <radio value="2" checked="{{false}}" />女
+      </radio-group>    
+      <button wx:if="{{item.btnshow}}" id="btn{{item.id}}" bindtap="submit" style="width:300rpx;">提交{{item.id}}</button>
+    </view>
+  </scroll-view>
+  <button bindtap="addItem">添加组件</button>
+  <view>
+    <button bindtap="scanQRCode">扫描二维码</button>
+    <view wx:if="{{scanResult}}">扫描结果: {{scanResult}}</view>
+  </view>   
+
+</view>

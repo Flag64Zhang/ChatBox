@@ -1,0 +1,27 @@
+/* pages/mylayout/mylayout.wxss */
+.container1{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%; /* 确保父容器占满宽度 */
+  height: 300px;
+  border: black solid 1px;
+}
+.mybtn{
+  width: 130rpx;
+}
+button{
+  text-align: center;
+  font-size: 14px;
+}
+.container2{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%; /* 确保父容器占满宽度 */
+  height: 300px;
+  border: black solid 1px;
+}
+

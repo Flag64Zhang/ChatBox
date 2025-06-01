@@ -1,0 +1,12 @@
+<!--pages/booklist/booklist.wxml-->
+<scroll-view class="container">
+  <towxml nodes="{{article}}"/>
+</scroll-view>    
+<button bindtap="goToDetail">跳转到分包详情页</button>
+<button bindtap="toAudioBox">通信</button>
+<view class="container">
+  <button bindtap="chooseAudio">选择MP3文件</button>
+  <button bindtap="uploadAudio" disabled="{{!audioPath}}">上传MP3</button>
+  <progress percent="{{progress}}" show-info stroke-width="6" />
+  <text>{{statusText}}</text>
+</view>

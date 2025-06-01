@@ -1,0 +1,3 @@
+<!--pages/menu/menu.wxml-->
+<navigation-bar title="Weixin" back="{{false}}" color="black" background="#FFF">列表頁</navigation-bar>
+<text>pages/menu/menu.wxml</text>

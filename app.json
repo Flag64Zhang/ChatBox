@@ -1,0 +1,56 @@
+{
+  "pages": [
+    "pages/booklist/booklist",
+    "pages/audiobox/audiobox",
+    "pages/bookquery/bookquery",
+    "pages/chatbox/chatbox",
+    "pages/menu/menu",
+    "pages/index/index",
+    "pages/bookme/bookme",
+    "pages/mylayout/mylayout"
+  ],
+  "subPackages": [
+    {
+      "root": "subpages",
+      "pages": [
+        "pages/usercenter/usercenter"
+      ]
+    }
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "课程助手",
+    "navigationBarTextStyle": "black",
+    "enablePullDownRefresh": false
+  },
+  "tabBar": {
+    "list": [
+      {
+        "iconPath": "assets/img/search-1.png",
+        "selectedIconPath": "assets/img/search.png",
+        "pagePath": "pages/audiobox/audiobox",
+        "text": "图书查询"
+      },
+      {
+        "iconPath": "assets/img/dy-1.png",
+        "selectedIconPath": "assets/img/dy.png",
+        "pagePath": "pages/booklist/booklist",
+        "text": "图书录入"
+      },
+      {
+        "iconPath": "assets/img/tj-1.png",
+        "selectedIconPath": "assets/img/tj.png",
+        "pagePath": "pages/mylayout/mylayout",
+        "text": "layout"
+      },
+      {
+        "iconPath": "assets/img/tj-1.png",
+        "selectedIconPath": "assets/img/tj.png",
+        "pagePath": "pages/bookme/bookme",
+        "text": "我"
+      }
+    ]
+  },
+  "sitemapLocation": "sitemap.json"
+}

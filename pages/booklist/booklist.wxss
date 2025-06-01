@@ -1,0 +1,21 @@
+/* pages/booklist/booklist.wxss */
+
+/* 基础容器样式 */
+.container {
+  border: 1rpx solid black;
+}
+button {
+  margin: 10px 0;
+  width: 80%;
+}
+
+progress {
+  margin: 20px 0;
+  width: 80%;
+}
+
+text {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}

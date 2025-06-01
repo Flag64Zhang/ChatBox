@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "navigation-bar": "/components/navigation-bar/navigation-bar",
+    "van-button": "/miniprogram_npm/@vant/weapp/button/index",
+    "van-toast": "/miniprogram_npm/@vant/weapp/toast/index",
+    "van-slider": "/miniprogram_npm/@vant/weapp/slider/index"
+  }
+}

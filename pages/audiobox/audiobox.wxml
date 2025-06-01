@@ -1,0 +1,49 @@
+<!--pages/audiobox/audiobox.wxml-->
+<view class="container">
+  <!-- 聊天消息列表 -->
+  <view class="message-list">
+    <view wx:for="{{messages}}" wx:key="index" class="message-item">
+      <!-- 用户消息 -->
+      <view wx:if="{{item.type === 'user'}}" class="user-message">
+        <image class="avatar" src="/assets/img/user-avatar.svg"></image>
+        <view class="message-content">
+          <text>{{item.content}}</text>
+        </view>
+      </view>
+      
+      <!-- 语音消息 -->
+      <view wx:if="{{item.type === 'voice'}}" class="user-message">
+        <image class="avatar" src="/assets/img/ai-avatar.svg"></image>
+        <view class="voice-content" style="width: 200rpx;">
+          <button class="voice-btn" bindtap="playVoice" data-path="{{item.path}}">
+            <image style="height: 50rpx;" src="/assets/img/voice-icon.svg"></image>
+            <text>{{item.duration}}s</text>
+          </button>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 底部输入区域 -->
+  <view class="input-area">
+    <!-- 语音/文字切换按钮 -->
+    <button class="voice-btn image" bindtap="toggleInputMode">
+      <image src="{{isVoiceMode ? '/assets/img/voice-icon.svg' : '/assets/img/text-icon.svg'}}"></image>
+    </button>
+    
+    <!-- 文字输入 -->
+    <view wx:if="{{!isVoiceMode}}" class="" style="width: 500rpx;">
+      <input class="input-box" bindinput="onInputChange" value="{{inputValue}}" placeholder="输入消息..."/>
+    </view>
+    
+    <!-- 语音输入按钮 -->
+    <view wx:if="{{isVoiceMode}}" class="" style="width: 700rpx;">
+      <button class="voice-record-btn" bindtouchstart="startRecord" bindtouchend="endRecord"bindtouchcancel="cancelRecord">
+        {{recording ? '松开结束' : '按住说话'}}
+      </button>
+    </view>
+    
+    <!-- 发送按钮 -->
+    <button wx:if="{{!isVoiceMode}}" class="send-btn" bindtap="sendMessage">发送</button>
+  </view>
+</view>
