@@ -73,7 +73,7 @@ Page({
   // 2. 将 code 发送到你的服务器
   sendCodeToServer(code) {
     wx.request({
-      url: 'https://silc.vip.cpolar.cn/api/get-openid', // 替换为你的后端接口
+      url: 'http://172.20.10.4:3000/api/get-openid', // 替换为你的后端接口
       method: 'POST',
       data: { code },
       success: (res) => {
@@ -98,7 +98,7 @@ Page({
 
     // 已授权，发送订阅请求
     wx.request({
-      url: 'https://silc.vip.cpolar.cn/api/send-subscribe',
+      url: 'http://172.20.10.4:3000/api/send-subscribe',
       method: 'POST',
       data: {
         templateId: this.data.templateId,

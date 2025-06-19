@@ -30,13 +30,13 @@
         "iconPath": "assets/img/search-1.png",
         "selectedIconPath": "assets/img/search.png",
         "pagePath": "pages/audiobox/audiobox",
-        "text": "图书查询"
+        "text": "chatBox"
       },
       {
         "iconPath": "assets/img/dy-1.png",
         "selectedIconPath": "assets/img/dy.png",
         "pagePath": "pages/booklist/booklist",
-        "text": "图书录入"
+        "text": "Quiz"
       },
       {
         "iconPath": "assets/img/tj-1.png",

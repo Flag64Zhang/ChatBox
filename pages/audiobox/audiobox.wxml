@@ -11,6 +11,14 @@
         </view>
       </view>
       
+      <!-- AI消息 -->
+      <view wx:if="{{item.type === 'ai'}}" class="ai-message">
+        <image class="avatar" src="/assets/img/ai-avatar.svg"></image>
+        <view class="message-content">
+          <text>{{item.content}}</text>
+        </view>
+      </view>
+      
       <!-- 语音消息 -->
       <view wx:if="{{item.type === 'voice'}}" class="user-message">
         <image class="avatar" src="/assets/img/ai-avatar.svg"></image>

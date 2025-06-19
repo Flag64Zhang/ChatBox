@@ -41,7 +41,7 @@ Page({
 
   getMsg: function(){
     wx.request({
-      url: 'https://silc.vip.cpolar.cn/api/data', // 替换为你的后端地址
+      url: 'http://172.20.10.4:3000', // 替换为你的后端地址
       method: 'POST',
       data: {
         key1: 'value1',

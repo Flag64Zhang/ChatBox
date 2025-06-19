@@ -199,7 +199,58 @@ Page({
 
   // 调用聊天API
   callChatAPI(prompt) {
-    // 这里是之前的聊天API调用逻辑
-    // ...
+    console.log('开始调用API，prompt:', prompt);
+    
+    // 显示加载提示
+    wx.showLoading({
+      title: '正在思考...',
+    });
+    
+    wx.request({
+      url: `${getApp().globalData.apiBaseUrl}/api/chat`,
+      method: 'POST',
+      data: {
+        prompt: prompt
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: (res) => {
+        console.log('API响应:', res.data);
+        wx.hideLoading(); // 隐藏加载提示
+        
+        if (res.data && res.data.success) {
+          // 处理返回的消息，移除HTML标签
+          let aiMessage = res.data.message;
+          aiMessage = aiMessage.replace(/<[^>]+>/g, ''); // 移除所有HTML标签
+          
+          // 更新消息列表
+          const newMessages = [...this.data.messages];
+          newMessages.push({
+            type: 'ai',
+            content: aiMessage
+          });
+          
+          this.setData({
+            messages: newMessages
+          });
+          
+          console.log('消息列表更新:', this.data.messages);
+        } else {
+          wx.showToast({
+            title: 'AI回复失败',
+            icon: 'none'
+          });
+        }
+      },
+      fail: (err) => {
+        wx.hideLoading(); // 隐藏加载提示
+        console.error('API调用失败:', err);
+        wx.showToast({
+          title: '网络错误',
+          icon: 'none'
+        });
+      }
+    });
   }
 });

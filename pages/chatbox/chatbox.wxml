@@ -17,5 +17,4 @@
     <button bindtap="scanQRCode">扫描二维码</button>
     <view wx:if="{{scanResult}}">扫描结果: {{scanResult}}</view>
   </view>   
-
 </view>

@@ -1,6 +1,6 @@
 <!--pages/mylayout/mylayout.wxml-->
 <view class="container1">
-  <view><text>fdfsdf</text></view>
+  <view><text>chatBox</text></view>
   <view class='mybtn'><button class="">点击</button></view>
 </view>
 <view class="container2">
