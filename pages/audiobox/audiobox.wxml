@@ -1,36 +1,34 @@
 <!--pages/audiobox/audiobox.wxml-->
 <view class="container">
   <!-- 聊天消息列表 -->
-  <view class="message-list">
-    <view wx:for="{{messages}}" wx:key="index" class="message-item">
-      <!-- 用户消息 -->
-      <view wx:if="{{item.type === 'user'}}" class="user-message">
-        <image class="avatar" src="/assets/img/user-avatar.svg"></image>
-        <view class="message-content">
-          <text>{{item.content}}</text>
+  <scroll-view scroll-y class="chat-container" scroll-into-view="{{scrollToMessage}}">
+    <view class="message-list">
+      <view wx:for="{{messages}}" wx:key="index" class="message-item" id="msg-{{index}}">
+        <!-- 用户消息 -->
+        <view wx:if="{{item.type === 'user'}}" class="user-message">
+          <view class="message-content user">{{item.content}}</view>
+          <image class="avatar" src="/assets/img/user-avatar.svg"></image>
         </view>
-      </view>
-      
-      <!-- AI消息 -->
-      <view wx:if="{{item.type === 'ai'}}" class="ai-message">
-        <image class="avatar" src="/assets/img/ai-avatar.svg"></image>
-        <view class="message-content">
-          <text>{{item.content}}</text>
+        
+        <!-- AI消息 -->
+        <view wx:if="{{item.type === 'ai'}}" class="ai-message">
+          <image class="avatar" src="/assets/img/ai-avatar.svg"></image>
+          <view class="message-content ai">{{item.content}}</view>
         </view>
-      </view>
-      
-      <!-- 语音消息 -->
-      <view wx:if="{{item.type === 'voice'}}" class="user-message">
-        <image class="avatar" src="/assets/img/ai-avatar.svg"></image>
-        <view class="voice-content" style="width: 200rpx;">
-          <button class="voice-btn" bindtap="playVoice" data-path="{{item.path}}">
-            <image style="height: 50rpx;" src="/assets/img/voice-icon.svg"></image>
-            <text>{{item.duration}}s</text>
-          </button>
+        
+        <!-- 语音消息 -->
+        <view wx:if="{{item.type === 'voice'}}" class="user-message">
+          <view class="voice-content">
+            <button class="voice-btn" bindtap="playVoice" data-path="{{item.path}}">
+              <image style="height: 50rpx;" src="/assets/img/voice-icon.svg"></image>
+              <text>{{item.duration}}s</text>
+            </button>
+          </view>
+          <image class="avatar" src="/assets/img/user-avatar.svg"></image>
         </view>
       </view>
     </view>
-  </view>
+  </scroll-view>
   
   <!-- 底部输入区域 -->
   <view class="input-area">
@@ -40,13 +38,13 @@
     </button>
     
     <!-- 文字输入 -->
-    <view wx:if="{{!isVoiceMode}}" class="" style="width: 500rpx;">
+    <view wx:if="{{!isVoiceMode}}" class="input-wrapper">
       <input class="input-box" bindinput="onInputChange" value="{{inputValue}}" placeholder="输入消息..."/>
     </view>
     
     <!-- 语音输入按钮 -->
-    <view wx:if="{{isVoiceMode}}" class="" style="width: 700rpx;">
-      <button class="voice-record-btn" bindtouchstart="startRecord" bindtouchend="endRecord"bindtouchcancel="cancelRecord">
+    <view wx:if="{{isVoiceMode}}" class="input-wrapper">
+      <button class="voice-record-btn" bindtouchstart="startRecord" bindtouchend="endRecord" bindtouchcancel="cancelRecord">
         {{recording ? '松开结束' : '按住说话'}}
       </button>
     </view>

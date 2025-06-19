@@ -3,7 +3,7 @@ Page({
   data: {
     messages: [],
     inputValue: '',
-    isVoiceMode: true,
+    isVoiceMode: false,
     recording: false,
     recorderManager: null,
     innerAudioContext: null
@@ -14,8 +14,45 @@ Page({
     this.initRecorder();
     // 初始化音频播放器
     this.initAudioPlayer();
+    // 加载问卷对话内容
+    this.loadSurveyDialog();
   },
 
+  onShow() {
+    // 每次页面显示时重新加载对话内容
+    this.loadSurveyDialog();
+  },
+
+  // 加载问卷对话内容
+  loadSurveyDialog() {
+    const app = getApp();
+    if (app.globalData.surveyDialog && app.globalData.surveyDialog.length > 0) {
+      // 将问卷对话转换为消息格式
+      const surveyMessages = app.globalData.surveyDialog.map(dialog => ({
+        type: dialog.role, // 'ai' 或 'user'
+        content: dialog.content,
+        timestamp: dialog.timestamp
+      }));
+
+      // 更新消息列表
+      this.setData({
+        messages: surveyMessages
+      });
+
+      // 滚动到底部
+      wx.nextTick(() => {
+        wx.createSelectorQuery()
+          .select('.chat-container')
+          .boundingClientRect(rect => {
+            wx.pageScrollTo({
+              scrollTop: rect.height,
+              duration: 300
+            });
+          })
+          .exec();
+      });
+    }
+  },
 
   onInputChange(e) {
     this.setData({
@@ -36,21 +73,28 @@ Page({
     // 录音结束事件
     this.recorderManager.onStop((res) => {
       console.log('录音结束', res);
+      console.log('录音文件信息:', {
+        tempFilePath: res.tempFilePath,
+        duration: res.duration,
+        fileSize: res.fileSize
+      });
+      
       this.setData({ recording: false });
       
-      // 添加语音消息到聊天界面
+      // 先添加语音消息到聊天界面（使用临时路径）
       const voiceMessage = {
         type: 'voice',
         path: res.tempFilePath,
-        duration: Math.floor(res.duration / 1000) || 1
+        duration: Math.floor(res.duration / 1000) || 1,
+        tempPath: res.tempFilePath // 保存临时路径
       };
       
       this.setData({
         messages: [...this.data.messages, voiceMessage]
       });
       
-      // 这里可以将语音文件上传到服务器
-      this.uploadVoiceFile(res.tempFilePath);
+      // 上传语音文件到服务器
+      this.uploadVoiceFile(res.tempFilePath, voiceMessage);
     });
     
     // 录音错误事件
@@ -114,12 +158,10 @@ Page({
   // 实际开始录音
   startRecording() {
     const options = {
-      format: 'mp3', // 可选择 'mp3' 或 'aac'
-      sampleRate: 44100,
-      numberOfChannels: 1,
-      encodeBitRate: 192000
+      format: 'mp3'
     };
     
+    console.log('开始录音，参数:', options);
     this.recorderManager.start(options);
   },
 
@@ -137,14 +179,52 @@ Page({
   // 播放语音
   playVoice(e) {
     const filePath = e.currentTarget.dataset.path;
-    if (!filePath) return;
+    if (!filePath) {
+      console.error('播放路径为空');
+      wx.showToast({
+        title: '播放路径无效',
+        icon: 'none'
+      });
+      return;
+    }
     
+    console.log('开始播放语音:', filePath);
+    
+    // 停止当前播放
+    if (this.innerAudioContext) {
+      this.innerAudioContext.stop();
+    }
+    
+    // 直接播放
+    this.startPlayAudio(filePath);
+  },
+
+  // 开始播放音频
+  startPlayAudio(filePath) {
     this.innerAudioContext.src = filePath;
+    
+    // 添加播放事件监听
+    this.innerAudioContext.onPlay(() => {
+      console.log('开始播放');
+    });
+    
+    this.innerAudioContext.onEnded(() => {
+      console.log('播放结束');
+    });
+    
+    this.innerAudioContext.onError((err) => {
+      console.error('播放错误:', err);
+      wx.showToast({
+        title: '播放失败',
+        icon: 'none'
+      });
+    });
+    
     this.innerAudioContext.play();
   },
 
   // 上传语音文件到服务器
-  uploadVoiceFile(tempFilePath) {
+  uploadVoiceFile(tempFilePath, voiceMessage) {
     wx.uploadFile({
       url: `${getApp().globalData.apiBaseUrl}/api/upload/voice`,
       filePath: tempFilePath,
@@ -157,15 +237,26 @@ Page({
         const data = JSON.parse(res.data)
         if (data.success) {
           console.log('上传成功', res);
+          
+          // 更新消息列表中的文件路径为服务器路径
+          const messages = this.data.messages;
+          const lastMessage = messages[messages.length - 1];
+          if (lastMessage.type === 'voice' && lastMessage.tempPath === tempFilePath) {
+            lastMessage.path = `${getApp().globalData.apiBaseUrl}/api/audio/${data.file.fileName}`;
+            this.setData({ messages: messages });
+          }
+          
+          wx.showToast({
+            title: '语音上传成功',
+            icon: 'success'
+          });
         } else {
           console.error('上传失败');
           wx.showToast({
             title: '语音上传失败',
             icon: 'none'
           });
-        } 
-        console.log('上传成功', res);
-        // 处理服务器返回的语音URL
+        }
       },
       fail: (err) => {
         console.error('上传失败', err);

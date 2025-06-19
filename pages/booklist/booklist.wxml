@@ -1,12 +1,67 @@
 <!--pages/booklist/booklist.wxml-->
-<scroll-view class="container">
-  <towxml nodes="{{article}}"/>
-</scroll-view>    
-<button bindtap="goToDetail">跳转到分包详情页</button>
-<button bindtap="toAudioBox">通信</button>
-<view class="container">
-  <button bindtap="chooseAudio">选择MP3文件</button>
-  <button bindtap="uploadAudio" disabled="{{!audioPath}}">上传MP3</button>
-  <progress percent="{{progress}}" show-info stroke-width="6" />
-  <text>{{statusText}}</text>
+<view class="container {{isLoading ? 'loading' : ''}}">
+  <!-- 进度指示器 -->
+  <view class="progress-indicator" wx:if="{{!completed}}">
+    <view class="progress-text">问题 {{currentQuestionIndex + 1}}/{{totalQuestions}}</view>
+    <progress percent="{{(currentQuestionIndex + 1) / totalQuestions * 100}}" stroke-width="3" activeColor="#5C6BC0" backgroundColor="#E0E0E0"/>
+  </view>
+
+  <!-- 问题区域 -->
+  <view class="question-container" wx:if="{{!surveyCompleted}}">
+    <view class="question-content">
+      <text class="question-text">{{currentQuestion.text}}</text>
+      
+      <!-- 选择题选项 -->
+      <view class="options-container" wx:if="{{currentQuestion.type === 'choice'}}">
+        <view 
+          wx:for="{{currentQuestion.options}}" 
+          wx:key="index"
+          class="option-item {{selectedOption === index ? 'selected' : ''}}"
+          bindtap="selectOption"
+          data-index="{{index}}">
+          <text>{{item}}</text>
+        </view>
+      </view>
+
+      <!-- 输入框 -->
+      <view class="input-container" wx:if="{{currentQuestion.type === 'input'}}">
+        <input 
+          type="text" 
+          placeholder="{{currentQuestion.placeholder}}"
+          value="{{inputAnswer}}"
+          bindconfirm="handleInputConfirm"
+          bindinput="handleInput"/>
+      </view>
+    </view>
+  </view>
+
+  <!-- 评分滑块（仅在完成基本问题后显示） -->
+  <view class="rating-container" wx:if="{{showRating && !completed}}">
+    <text class="rating-title">请对本节课程进行评分</text>
+    <text class="rating-value">{{ratingValue}}</text>
+    <slider 
+      min="0" 
+      max="10" 
+      value="{{ratingValue}}" 
+      block-size="28"
+      activeColor="#5C6BC0"
+      backgroundColor="#E0E0E0"
+      bindchanging="handleRatingChange"
+      bindchange="handleRatingComplete"/>
+    <text class="rating-description">{{ratingDescriptions[ratingValue]}}</text>
+  </view>
+
+  <!-- 完成页面 -->
+  <view class="completion-container" wx:if="{{completed}}">
+    <view class="completion-icon">✓</view>
+    <text class="completion-title">恭喜您完成本次调查问卷</text>
+    <text class="completion-subtitle">感谢您的参与和反馈</text>
+    <button class="back-button" bindtap="goBack">返回</button>
+  </view>
+
+  <!-- 加载动画 -->
+  <view class="loading-container" wx:if="{{isLoading}}">
+    <view class="loading-spinner"></view>
+    <text class="loading-text">正在处理...</text>
+  </view>
 </view>
