@@ -112,14 +112,16 @@ Page({
   initAudioPlayer() {
     this.innerAudioContext = wx.createInnerAudioContext();
     
-    // 播放错误事件
-    this.innerAudioContext.onError((err) => {
-      console.error('播放错误', err);
-      wx.showToast({
-        title: '播放失败',
-        icon: 'none'
-      });
+    // 播放开始事件
+    this.innerAudioContext.onPlay(() => {
+      console.log('开始播放');
     });
+    
+    // 播放结束事件
+    this.innerAudioContext.onEnded(() => {
+      console.log('播放结束');
+    });
+    
   },
 
 
@@ -202,24 +204,6 @@ Page({
   // 开始播放音频
   startPlayAudio(filePath) {
     this.innerAudioContext.src = filePath;
-    
-    // 添加播放事件监听
-    this.innerAudioContext.onPlay(() => {
-      console.log('开始播放');
-    });
-    
-    this.innerAudioContext.onEnded(() => {
-      console.log('播放结束');
-    });
-    
-    this.innerAudioContext.onError((err) => {
-      console.error('播放错误:', err);
-      wx.showToast({
-        title: '播放失败',
-        icon: 'none'
-      });
-    });
-    
     this.innerAudioContext.play();
   },
 

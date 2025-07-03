@@ -131,7 +131,7 @@ Page({
 
   getMsg: function(){
     wx.request({
-      url: 'http://172.20.10.4:3000', // 后端地址
+      url: 'http://127.0.0.1:3000', // 后端地址
       method: 'POST',
       data: {
         key1: 'value1',
