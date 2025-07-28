@@ -1,9 +1,37 @@
 <!--pages/mylayout/mylayout.wxml-->
-<view class="container1">
-  <view><text>chatBox</text></view>
-  <view class='mybtn'><button class="">点击</button></view>
+<view wx:for="{{list}}" wx:key="id">
+  <view class="level1">
+    <text>{{item.title}}</text>
+    <button data-level="1" data-id="{{item.id}}" bindtap="showAddInput">添加二级内容</button>
+    <button data-level="1" data-id="{{item.id}}" data-type="up" bindtap="handleVote">👍{{item.up}}</button>
+    <button data-level="1" data-id="{{item.id}}" data-type="down" bindtap="handleVote">👎{{item.down}}</button>
+  </view>
+  <view wx:for="{{item.children}}" wx:key="id">
+    <view class="level2">
+      <text>{{item.title}}</text>
+      <button data-level="2" data-id="{{item.id}}" bindtap="showAddInput">添加三级内容</button>
+      <button data-level="2" data-id="{{item.id}}" data-type="up" bindtap="handleVote">👍{{item.up}}</button>
+      <button data-level="2" data-id="{{item.id}}" data-type="down" bindtap="handleVote">👎{{item.down}}</button>
+    </view>
+    <view wx:for="{{item.children}}" wx:key="id">
+      <view class="level3">
+        <text>{{item.title}}</text>
+        <button data-level="3" data-id="{{item.id}}" data-type="up" bindtap="handleVote">👍{{item.up}}</button>
+        <button data-level="3" data-id="{{item.id}}" data-type="down" bindtap="handleVote">👎{{item.down}}</button>
+      </view>
+    </view>
+  </view>
 </view>
-<view class="container2">
-  <view><text>fdfsdf</text></view>
-  <view class='mybtn'><button class="">点击</button></view>
+<button data-level="0" bindtap="showAddInput">添加一级栏目</button>
+
+<view wx:if="{{showDialog}}" class="dialog-mask">
+  <view class="dialog-box">
+    <view class="dialog-title">添加内容</view>
+    <input value="{{inputValue}}" bindinput="onInputChange" placeholder="请输入内容" class="dialog-input" />
+    <view class="dialog-actions">
+      <button bindtap="onDialogConfirm">确定</button>
+      <button bindtap="onDialogClose">取消</button>
+    </view>
+  </view>
 </view>
+  
