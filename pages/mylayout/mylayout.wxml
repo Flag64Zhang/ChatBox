@@ -1,23 +1,29 @@
 <!--pages/mylayout/mylayout.wxml-->
 <view wx:for="{{list}}" wx:key="id">
-  <view class="level1">
+  <view class="level1" style="display: flex; justify-content: space-between; align-items: center;">
     <text>{{item.title}}</text>
-    <button data-level="1" data-id="{{item.id}}" bindtap="showAddInput">添加二级内容</button>
-    <button data-level="1" data-id="{{item.id}}" data-type="up" bindtap="handleVote">👍{{item.up}}</button>
-    <button data-level="1" data-id="{{item.id}}" data-type="down" bindtap="handleVote">👎{{item.down}}</button>
+    <view style="display: flex; gap: 8px;">
+      <button data-level="1" data-id="{{item.id}}" bindtap="showAddInput">添加二级内容</button>
+      <button data-level="1" data-id="{{item.id}}" data-type="up" bindtap="handleVote">👍{{item.up}}</button>
+      <button data-level="1" data-id="{{item.id}}" data-type="down" bindtap="handleVote">👎{{item.down}}</button>
+    </view>
   </view>
   <view wx:for="{{item.children}}" wx:key="id">
-    <view class="level2">
+    <view class="level2" style="display: flex; justify-content: space-between; align-items: center;">
       <text>{{item.title}}</text>
-      <button data-level="2" data-id="{{item.id}}" bindtap="showAddInput">添加三级内容</button>
-      <button data-level="2" data-id="{{item.id}}" data-type="up" bindtap="handleVote">👍{{item.up}}</button>
-      <button data-level="2" data-id="{{item.id}}" data-type="down" bindtap="handleVote">👎{{item.down}}</button>
+      <view style="display: flex; gap: 8px;">
+        <button data-level="2" data-id="{{item.id}}" bindtap="showAddInput">添加三级内容</button>
+        <button data-level="2" data-id="{{item.id}}" data-type="up" bindtap="handleVote">👍{{item.up}}</button>
+        <button data-level="2" data-id="{{item.id}}" data-type="down" bindtap="handleVote">👎{{item.down}}</button>
+      </view>
     </view>
     <view wx:for="{{item.children}}" wx:key="id">
-      <view class="level3">
+      <view class="level3" style="display: flex; justify-content: space-between; align-items: center;">
         <text>{{item.title}}</text>
-        <button data-level="3" data-id="{{item.id}}" data-type="up" bindtap="handleVote">👍{{item.up}}</button>
-        <button data-level="3" data-id="{{item.id}}" data-type="down" bindtap="handleVote">👎{{item.down}}</button>
+        <view style="display: flex; gap: 8px;">
+          <button data-level="3" data-id="{{item.id}}" data-type="up" bindtap="handleVote">👍{{item.up}}</button>
+          <button data-level="3" data-id="{{item.id}}" data-type="down" bindtap="handleVote">👎{{item.down}}</button>
+        </view>
       </view>
     </view>
   </view>
@@ -34,4 +40,3 @@
     </view>
   </view>
 </view>
-  

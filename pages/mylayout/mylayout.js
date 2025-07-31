@@ -107,3 +107,12 @@ Page({
     this.setData({ showDialog: false });
   }
 });
+        <button data-type="down" bindtap="handleVote">👎</button>
+      </view>
+    `;
+  },
+  // 关闭弹窗
+  onDialogClose() {
+    this.setData({ showDialog: false });
+  }
+});
