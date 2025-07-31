@@ -23,6 +23,11 @@
   </view>
 </view>
 <view class="container">
+  <!-- 用户信息展示 -->
+  <view wx:if="{{userInfo}}" style="display:flex;align-items:center;margin-bottom:24rpx;">
+    <image src="{{userInfo.avatarUrl}}" style="width:72rpx;height:72rpx;border-radius:50%;margin-right:16rpx;" />
+    <text style="font-size:18px;font-weight:bold;">{{userInfo.nickName}}</text>
+  </view>
   <button bindtap="handleSubscribe" type="primary">
     {{subscribed ? '接收订阅消息' : '授权并订阅'}}
   </button>

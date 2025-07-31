@@ -3,5 +3,5 @@
     "navigation-bar": "/components/navigation-bar/navigation-bar",
     "towxml": "../../towxml/towxml"
   },
-  "navigationBarTitleText": "图书管理系统"
+  "navigationBarTitleText": "课程助手"
 }

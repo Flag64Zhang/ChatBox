@@ -7,53 +7,12 @@ Page({
   data: {
     canSubscribe: false, // 是否可以订阅
     templateId: 'GTI9QsjIhxZyCbKXPb9w6WOQqvXO9id0qaLX-cHwpHY', // 从后台获取或直接写在这里    
-    newsList: [
-      {
-        id: 1,
-        title: "中国空间站将开展多项科学实验，涉及微重力物理领域",
-        subtitle: "天舟六号货运飞船已完成物资补给",
-        date: "2025-04-27 14:30"
-      },
-      {
-        id: 2,
-        title: "全球气候变化峰会今日开幕，多国承诺加强碳中和合作",
-        subtitle: "中国代表团提出“绿色技术共享”倡议",
-        date: "2025-04-26 09:15"
-      }
-    ],
-    hasMore: true, // 是否显示加载更多
     showSurvey: false, // 是否显示问卷弹窗
     surveyResult: null, // 问卷结果
-    subscribed: false // 补充：订阅状态
+    subscribed: false, // 补充：订阅状态
+    userInfo: null // 新增：用户信息
   },
 
-  // 点击新闻跳转详情页
-  handleNewsTap(e) {
-    const newsId = e.currentTarget.dataset.newsid;
-    wx.navigateTo({
-      url: `/pages/newsDetail/newsDetail?id=${newsId}`
-    });
-  },
-
-  // 加载更多新闻（示例逻辑，需替换为实际接口请求）
-  loadMoreNews() {
-    // 模拟异步加载
-    setTimeout(() => {
-      const newNews = [
-        {
-          id: 3,
-          title: "人工智能大模型技术突破，图像生成效率提升300%",
-          subtitle: "某科技公司发布新一代多模态模型",
-          date: "2025-04-25 16:45"
-        }
-      ];
-      this.setData({
-        newsList: this.data.newsList.concat(newNews),
-        hasMore: newNews.length > 0 // 若无新数据则隐藏按钮
-      });
-    }, 1500);
-  },
-  
   /**
    * 生命周期函数--监听页面加载
    */
@@ -72,6 +31,12 @@ Page({
       }
     });
 
+    // 移除页面加载时主动拉取订阅授权
+    // this.requestSubscribe();
+
+    // 拉取用户信息
+    this.getUserProfile();
+
     // 检查是否已填写问卷
     const openid = wx.getStorageSync('openid');
     if (openid) {
@@ -82,10 +47,10 @@ Page({
     }
   },  
 
-  // 2. 将 code 发送到你的服务器
+  // 2. 将 code 发送到后端服务器
   sendCodeToServer(code) {
     wx.request({
-      url: 'http://127.0.0.1:3000/api/get-openid', // 替换为你的后端接口
+      url: 'http://localhost:3000/api/get-openid', // 替换为你的后端接口
       method: 'POST',
       data: { code },
       success: (res) => {
@@ -144,8 +109,9 @@ Page({
 
   // 订阅按钮点击事件
   handleSubscribe() {
+    // 只在用户点击时请求授权
     if (!this.data.subscribed) {
-      this.requestSubscribe(); // 先请求授权
+      this.requestSubscribe();
       return;
     }
 
@@ -174,13 +140,13 @@ Page({
     wx.requestSubscribeMessage({
       tmplIds: [this.data.templateId],
       success: (res) => {
+        console.log('requestSubscribeMessage返回:', res);
         if (res[this.data.templateId] === 'accept') {
           this.setData({ subscribed: true });
           wx.showToast({
             title: '授权成功',
             icon: 'success'
           });
-          // 这里可以立即发送订阅请求或让用户手动点击
         } else {
           wx.showToast({
             title: '您拒绝了授权',
@@ -194,9 +160,28 @@ Page({
           title: '授权失败，请重试',
           icon: 'none'
         });
+        // 增加详细错误提示
+        wx.showModal({
+          title: '授权失败',
+          content: '请检查小程序appid、模板id是否正确，或是否在真机环境下测试。错误信息：' + JSON.stringify(err),
+          showCancel: false
+        });
       }
     });
   },  
+
+  // 获取用户昵称和头像
+  getUserProfile() {
+    wx.getUserProfile({
+      desc: '用于完善用户资料',
+      success: (res) => {
+        this.setData({ userInfo: res.userInfo });
+      },
+      fail: () => {
+        wx.showToast({ title: '未授权获取用户信息', icon: 'none' });
+      }
+    });
+  },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
