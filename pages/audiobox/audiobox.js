@@ -18,10 +18,6 @@ Page({
     this.loadSurveyDialog();
   },
 
-  onShow() {
-    // 每次页面显示时重新加载对话内容
-    this.loadSurveyDialog();
-  },
 
   // 加载问卷对话内容
   loadSurveyDialog() {

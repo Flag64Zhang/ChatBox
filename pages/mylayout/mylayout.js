@@ -32,6 +32,9 @@ Page({
     addLevel: 0, // 0:一级栏目, 1:二级, 2:三级
     addParentId: null, // 父级id
     activeNames: [], // van-collapse 当前展开的一级栏目id数组
+    showQuiz: false,
+    quizQuestion: '',
+    quizOptions: []
   },
   onLoad(options) {},
   // van-collapse 折叠状态变化
@@ -42,6 +45,8 @@ Page({
   },
   // 显示输入弹窗
   showAddInput(e) {
+    // 一级不允许添加
+    if (e.currentTarget.dataset.level == 0) return;
     this.setData({
       showDialog: true,
       addLevel: e.currentTarget.dataset.level,
@@ -108,6 +113,30 @@ Page({
       }
     }
     this.setData({ list });
+  },
+  // re操作（可扩展为弹窗或其他交互）
+  handleRe(e) {
+    wx.showToast({ title: 're操作', icon: 'none' });
+  },
+  // 三级内容点击，针对“知识点”相关弹出追问
+  handleLevel3Tap(e) {
+    const parentTitle = e.currentTarget.dataset.parent;
+    // 仅“知识点”相关弹出追问
+    if (parentTitle === '知识点') {
+      this.setData({
+        showQuiz: true,
+        quizQuestion: '哪些知识点有点难？',
+        quizOptions: ['函数定义', '递归', '指针', '算法复杂度']
+      });
+    }
+  },
+  onQuizSelect(e) {
+    const idx = e.currentTarget.dataset.index;
+    wx.showToast({ title: `选择了：${this.data.quizOptions[idx]}`, icon: 'none' });
+    this.setData({ showQuiz: false });
+  },
+  onQuizClose() {
+    this.setData({ showQuiz: false });
   },
   // 关闭弹窗
   onDialogClose() {

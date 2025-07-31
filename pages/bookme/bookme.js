@@ -21,7 +21,10 @@ Page({
         date: "2025-04-26 09:15"
       }
     ],
-    hasMore: true // 是否显示加载更多
+    hasMore: true, // 是否显示加载更多
+    showSurvey: false, // 是否显示问卷弹窗
+    surveyResult: null, // 问卷结果
+    subscribed: false // 补充：订阅状态
   },
 
   // 点击新闻跳转详情页
@@ -68,6 +71,15 @@ Page({
         console.error('wx.login调用失败:', err);
       }
     });
+
+    // 检查是否已填写问卷
+    const openid = wx.getStorageSync('openid');
+    if (openid) {
+      this.checkSurvey(openid);
+    } else {
+      // openid获取后再检查问卷
+      this.surveyCheckPending = true;
+    }
   },  
 
   // 2. 将 code 发送到你的服务器
@@ -82,6 +94,11 @@ Page({
         // 存储到全局或本地缓存
         getApp().globalData.openid = openid;
         wx.setStorageSync('openid', openid);
+
+        // openid获取后检查问卷
+        if (this.surveyCheckPending) {
+          this.checkSurvey(openid);
+        }
       },
       fail: (err) => {
         console.error('请求后端失败:', err);
@@ -89,8 +106,44 @@ Page({
     });
   },
 
-   // 订阅按钮点击事件
-   handleSubscribe() {
+  // 检查是否已填写问卷
+  checkSurvey(openid) {
+    wx.request({
+      url: 'http://127.0.0.1:3000/api/get-survey', // 后端接口：根据openid获取问卷
+      method: 'POST',
+      data: { openid },
+      success: (res) => {
+        if (!res.data || !res.data.survey) {
+          // 未填写问卷，弹出问卷
+          this.setData({ showSurvey: true });
+        }
+      },
+      fail: (err) => {
+        console.error('获取问卷失败:', err);
+      }
+    });
+  },
+
+  // 问卷提交事件
+  handleSurveySubmit(e) {
+    const surveyResult = e.detail.value; // 假设表单提交
+    const openid = wx.getStorageSync('openid');
+    wx.request({
+      url: 'http://127.0.0.1:3000/api/save-survey', // 后端接口：保存问卷
+      method: 'POST',
+      data: { openid, survey: surveyResult },
+      success: (res) => {
+        wx.showToast({ title: '问卷提交成功', icon: 'success' });
+        this.setData({ showSurvey: false, surveyResult });
+      },
+      fail: (err) => {
+        wx.showToast({ title: '提交失败', icon: 'none' });
+      }
+    });
+  },
+
+  // 订阅按钮点击事件
+  handleSubscribe() {
     if (!this.data.subscribed) {
       this.requestSubscribe(); // 先请求授权
       return;
