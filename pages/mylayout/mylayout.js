@@ -31,8 +31,15 @@ Page({
     inputValue: '',
     addLevel: 0, // 0:一级栏目, 1:二级, 2:三级
     addParentId: null, // 父级id
+    activeNames: [], // van-collapse 当前展开的一级栏目id数组
   },
   onLoad(options) {},
+  // van-collapse 折叠状态变化
+  onCollapseChange(e) {
+    this.setData({
+      activeNames: e.detail
+    });
+  },
   // 显示输入弹窗
   showAddInput(e) {
     this.setData({
@@ -101,15 +108,6 @@ Page({
       }
     }
     this.setData({ list });
-  },
-  // 关闭弹窗
-  onDialogClose() {
-    this.setData({ showDialog: false });
-  }
-});
-        <button data-type="down" bindtap="handleVote">👎</button>
-      </view>
-    `;
   },
   // 关闭弹窗
   onDialogClose() {
