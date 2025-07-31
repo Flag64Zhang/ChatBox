@@ -1,5 +1,5 @@
 <!--pages/mylayout/mylayout.wxml-->
-<van-collapse value="{{activeNames}}" bind:change="onCollapseChange">
+<van-collapse value="{{activeNames}}" bind:change="onCollapseChange" accordion>
   <van-collapse-item wx:for="{{list}}" wx:key="id" name="{{item.id}}">
     <view slot="title" class="level1" style="display: flex; justify-content: space-between; align-items: center;">
       <text>{{item.title}}</text>

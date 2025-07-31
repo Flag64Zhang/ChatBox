@@ -34,7 +34,9 @@ Page({
     activeNames: [], // van-collapse 当前展开的一级栏目id数组
     showQuiz: false,
     quizQuestion: '',
-    quizOptions: []
+    quizOptions: [],
+    activeLevel1: null, // 当前展开的一级栏目id
+    activeLevel2: null // 当前展开的二级栏目id
   },
   onLoad(options) {},
   // van-collapse 折叠状态变化
